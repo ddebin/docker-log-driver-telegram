@@ -258,6 +258,31 @@ func TestParseClientConfig(t *testing.T) {
 			},
 		},
 		{
+			name: "custom topic id",
+			config: map[string]string{
+				cfgTokenKey:   "token",
+				cfgChatIDKey:  "chat_id",
+				cfgTopicIDKey: "789",
+			},
+			want: ClientConfig{
+				APIURL:  defaultClientConfig.APIURL,
+				Token:   "token",
+				ChatID:  "chat_id",
+				TopicID: "789",
+				Retries: defaultClientConfig.Retries,
+				Timeout: defaultClientConfig.Timeout,
+			},
+		},
+		{
+			name: "failed to parse topic id",
+			config: map[string]string{
+				cfgTokenKey:   "token",
+				cfgChatIDKey:  "chat_id",
+				cfgTopicIDKey: "invalid",
+			},
+			wantErr: "failed to parse \"topic_id\" option",
+		},
+		{
 			name: "failed to parse retries",
 			config: map[string]string{
 				cfgTokenKey:   "token",
