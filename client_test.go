@@ -185,6 +185,26 @@ func TestSendMessage_KeepsURLPath(t *testing.T) {
 	assert.Equal(t, []string{"/telegram/bot" + testToken + "/sendMessage"}, srv.requestPaths())
 }
 
+func TestSendMessage_ParseMode(t *testing.T) {
+	t.Parallel()
+
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		assert.NoError(t, r.ParseForm())
+		assert.Equal(t, "456", r.Form.Get("chat_id"))
+		assert.Equal(t, "HTML", r.Form.Get("parse_mode"))
+
+		w.Header().Set("Content-Type", "application/json")
+		_, err := fmt.Fprintln(w, respOK)
+		assert.NoError(t, err)
+	}))
+	defer srv.Close()
+
+	c, _ := newTestClient(t, srv.URL, 0)
+	c.cfg.ParseMode = "HTML"
+
+	require.NoError(t, c.SendMessage(context.Background(), "text"))
+}
+
 func TestSendMessage_NetworkError(t *testing.T) {
 	t.Parallel()
 

@@ -8,11 +8,12 @@ import (
 )
 
 const (
-	cfgURLKey     = "url"
-	cfgTokenKey   = "token"
-	cfgChatIDKey  = "chat_id"
-	cfgRetriesKey = "retries"
-	cfgTimeoutKey = "timeout"
+	cfgURLKey       = "url"
+	cfgTokenKey     = "token"
+	cfgChatIDKey    = "chat_id"
+	cfgParseModeKey = "parse_mode"
+	cfgRetriesKey   = "retries"
+	cfgTimeoutKey   = "timeout"
 
 	cfgNoFileKey   = "no-file"
 	cfgKeepFileKey = "keep-file"
@@ -129,6 +130,7 @@ func validateDriverOptions(opts map[string]string) error {
 		case cfgURLKey,
 			cfgTokenKey,
 			cfgChatIDKey,
+			cfgParseModeKey,
 			cfgRetriesKey,
 			cfgTimeoutKey,
 			cfgTemplateKey,
@@ -159,6 +161,15 @@ func parseClientConfig(containerDetails *ContainerDetails) (ClientConfig, error)
 
 	if url, ok := containerDetails.Config[cfgURLKey]; ok {
 		clientConfig.APIURL = url
+	}
+
+	if parseMode, ok := containerDetails.Config[cfgParseModeKey]; ok {
+		switch parseMode {
+		case "Markdown", "MarkdownV2", "HTML":
+			clientConfig.ParseMode = parseMode
+		default:
+			return clientConfig, fmt.Errorf("invalid %q option: %s", cfgParseModeKey, parseMode)
+		}
 	}
 
 	if retries, ok := containerDetails.Config[cfgRetriesKey]; ok {

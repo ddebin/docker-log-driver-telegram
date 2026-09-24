@@ -45,6 +45,9 @@ type ClientConfig struct {
 	// ChatID is the Telegram chat ID.
 	ChatID string
 
+	// ParseMode is the parse mode for the message text ("Markdown", "MarkdownV2", or "HTML"). Optional.
+	ParseMode string
+
 	// Retries is the number of retries to call the Telegram API.
 	Retries int
 
@@ -155,6 +158,9 @@ func (c *Client) SendMessage(ctx context.Context, text string) error {
 	values := url.Values{
 		"chat_id": {c.cfg.ChatID},
 		"text":    {text},
+	}
+	if c.cfg.ParseMode != "" {
+		values.Set("parse_mode", c.cfg.ParseMode)
 	}
 
 	var (
