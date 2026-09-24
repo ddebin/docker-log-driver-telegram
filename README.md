@@ -105,6 +105,7 @@ Restart Docker after changes: `systemctl restart docker`
 | token                | Yes      |                          | Bot API token                                                                                |
 | chat_id              | Yes      |                          | Target chat ID                                                                               |
 | topic_id             | No       |                          | Target forum topic (message thread) ID within the chat                                       |
+| parse_mode           | No       |                          | Message text parse mode: `Markdown`, `MarkdownV2`, or `HTML`                                  |
 | template             | No       | {log}                    | Message format template                                                                      |
 | filter-regex         | No       |                          | Regex to filter logs                                                                         |
 | retries              | No       | 5                        | Retry attempts after the initial request (0 = no retries)                                    |
@@ -119,6 +120,8 @@ Restart Docker after changes: `systemctl restart docker`
 `filter-regex` sends only log messages that match the regex.
 
 `topic_id` sends messages to a specific topic in a Telegram forum supergroup.
+
+`parse_mode` formats the message text as Markdown or HTML, as documented by the Telegram Bot API.
 
 ### Template Tags
 

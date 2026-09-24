@@ -42,6 +42,9 @@ type ClientConfig struct {
 	// of a forum supergroup. Optional.
 	TopicID string
 
+	// ParseMode is the parse mode for the message text ("Markdown", "MarkdownV2", or "HTML"). Optional.
+	ParseMode string
+
 	// Retries is the number of retries to call the Telegram API.
 	Retries int
 
@@ -128,6 +131,9 @@ func (c *Client) SendMessage(text string) error {
 	}
 	if c.cfg.TopicID != "" {
 		values.Set("message_thread_id", c.cfg.TopicID)
+	}
+	if c.cfg.ParseMode != "" {
+		values.Set("parse_mode", c.cfg.ParseMode)
 	}
 
 	var lastErr error
